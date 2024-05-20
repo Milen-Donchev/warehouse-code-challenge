@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProductType {
+  hazardous
+  non_hazardous
+}
+
+model Warehouse {
+  id          Int @id @default(autoincrement())
+  sizeLimit   Int @default(20)
+  productType ProductType
+
+  imports     Import[]
+  exports     Export[]
+  products    Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  title       String
+  size        Int
+  type        ProductType @default(hazardous)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  warehouseId Int?
+  warehouse   Warehouse? @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+
+  import      Import[]
+  export      Export[]
+}
+
+
+model Import {
+  id          Int @id @default(autoincrement())
+  timestamp   String
+  productId   Int
+  warehouseId Int
+  isArchived  Boolean @default(false)
+
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+}
+
+model Export {
+  id          Int @id @default(autoincrement())
+  timestamp   String
+  productId   Int
+  warehouseId Int
+
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+}

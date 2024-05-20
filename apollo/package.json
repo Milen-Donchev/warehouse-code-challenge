@@ -1,0 +1,26 @@
+{
+  "name": "apollo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx ./src/index.ts",
+    "db:seed": "tsx ./scripts/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@prisma/client": "^5.14.0",
+    "axios": "^1.7.0",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "prisma": "^5.14.0",
+    "tsx": "^4.10.4",
+    "typescript": "^5.4.5"
+  }
+}
