@@ -16,7 +16,7 @@
 
 ## Project setup
 
-#### 1. Clone the repo and install packages
+#### 1. Clone the repo
 
 ```bash
   git clone "https://github.com/Milen-Donchev/warehouse-code-challenge"
