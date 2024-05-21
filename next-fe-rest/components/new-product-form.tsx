@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { productsByTypeQuery } from "@/graphql/queries";
 import { useNewProductSheet } from "@/hooks/use-new-product-sheet";
 
 import {
@@ -35,12 +36,7 @@ export type FormData = z.infer<typeof schema>;
 
 export const NewProductForm = () => {
   const { close } = useNewProductSheet();
-  const [addProduct, { loading: processing }] = useMutation(
-    newProductMutation,
-    {
-      refetchQueries: ["MasterProductsQuery"],
-    }
-  );
+  const [addProduct, { loading: processing }] = useMutation(newProductMutation);
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -54,6 +50,15 @@ export const NewProductForm = () => {
   const onSubmit = async (values: FormData) => {
     await addProduct({
       variables: values,
+      refetchQueries: [
+        "MasterProductsQuery",
+        {
+          query: productsByTypeQuery,
+          variables: {
+            productType: values.type,
+          },
+        },
+      ],
     });
     close();
   };

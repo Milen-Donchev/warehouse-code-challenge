@@ -6,6 +6,8 @@ import { MoreHorizontal, Trash } from "lucide-react";
 
 import type { Product } from "@/types";
 
+import { productsByTypeQuery } from "@/graphql/queries";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,7 +57,15 @@ export const productColumns: ColumnDef<Product>[] = [
       const [deleteProduct, { loading: processing }] = useMutation(
         newProductMutation,
         {
-          refetchQueries: ["MasterProductsQuery"],
+          refetchQueries: [
+            "MasterProductsQuery",
+            {
+              query: productsByTypeQuery,
+              variables: {
+                productType: product.type,
+              },
+            },
+          ],
         }
       );
 
